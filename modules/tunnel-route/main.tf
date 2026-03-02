@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: Copyright Boozt Fashion, AB
 # SPDX-License-Identifier: MIT
 
-resource "cloudflare_zero_trust_tunnel_route" "route" {
+resource "cloudflare_zero_trust_tunnel_cloudflared_route" "route" {
   for_each   = var.module_enabled ? { for index, route in var.routes : route.network => route } : {}
   depends_on = [var.module_depends_on]
 

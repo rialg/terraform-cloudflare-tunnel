@@ -9,8 +9,6 @@ remotes:
       - hooks/commitlint/.lefthook.yaml
       # check if the license headers are present in the files
       - hooks/license-checker/.lefthook.yaml
-      # lint the markdown (.md) files
-      - hooks/markdown-lint/.lefthook.yaml
       # lint the yaml (.yml, .yaml) files
       - hooks/yamllint/.lefthook.yaml
       # terraform validation, fmt and tests

@@ -13,13 +13,13 @@ output "tunnel_id" {
 
 output "tunnel_token" {
   description = "The token of the Cloudflare Tunnel."
-  value       = try(cloudflare_zero_trust_tunnel_cloudflared.tunnel[0].tunnel_token, null)
+  value       = local.tunnel_token
   sensitive   = true
 }
 
 output "tunnel_cname" {
-  description = "Token used by a connector to authenticate and run the tunnel."
-  value       = try(cloudflare_zero_trust_tunnel_cloudflared.tunnel[0].cname, null)
+  description = "The CNAME of the Cloudflare Tunnel."
+  value       = try("${cloudflare_zero_trust_tunnel_cloudflared.tunnel[0].id}.cfargotunnel.com", null)
 }
 
 output "module_enabled" {

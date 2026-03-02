@@ -65,8 +65,8 @@ for commit messages, adhering to one of the following patterns:
 
 Refer to the table below for the possible commit types:
 
-| Type | Description|
-| ---- | ---- |
+| Type     | Description                                      |
+| -------- | ------------------------------------------------ |
 | build | Changes affecting the build system or dependencies |
 | chore | Maintenance tasks such as upgrades or cleanup |
 | ci | Changes to CI configuration files or scripts |
@@ -82,7 +82,7 @@ Refer to the table below for the possible commit types:
 Exclamation mark (!) is optional and can be used to indicate breaking changes.
 Use it before colon (:). i.e. `feat(auth)!: add login feature`.
 
-For comprehensive documentation, [click here][conventional-commits].
+For comprehensive documentation, see the [Conventional Commits specification][conventional-commits].
 
 If a backwards incompatible change is unavoidable, ensure to mention it in
 your pull request and provide justification for the necessity of the change.

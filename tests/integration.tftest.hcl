@@ -20,9 +20,6 @@ run "tunnel" {
       ingress_rule = [
         {
           service = "bastion"
-          origin_request = {
-            bastion_mode = true
-          }
         }
       ]
     }
@@ -68,7 +65,7 @@ run "virtual_network" {
   }
 
   assert {
-    condition     = cloudflare_zero_trust_tunnel_virtual_network.virtual_network[0].is_default_network == false
+    condition     = cloudflare_zero_trust_tunnel_cloudflared_virtual_network.virtual_network[0].is_default_network == false
     error_message = "The Cloudflare virtual network is not the default network."
   }
 }
@@ -97,7 +94,7 @@ run "tunnel_route" {
 
   # check if we have at least two routes
   assert {
-    condition     = length(cloudflare_zero_trust_tunnel_route.route) == 2
+    condition     = length(cloudflare_zero_trust_tunnel_cloudflared_route.route) == 2
     error_message = "The Cloudflare tunnel routes are not two."
   }
 

@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: Copyright Boozt Fashion, AB
 # SPDX-License-Identifier: MIT
 
-resource "cloudflare_zero_trust_tunnel_virtual_network" "virtual_network" {
+resource "cloudflare_zero_trust_tunnel_cloudflared_virtual_network" "virtual_network" {
   count      = var.module_enabled ? 1 : 0
   depends_on = [var.module_depends_on]
 

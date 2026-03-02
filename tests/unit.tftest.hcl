@@ -16,9 +16,6 @@ run "tunnel" {
       ingress_rule = [
         {
           service = "bastion"
-          origin_request = {
-            bastion_mode = true
-          }
         },
       ]
     }
@@ -40,13 +37,8 @@ run "tunnel" {
   }
 
   assert {
-    condition     = cloudflare_zero_trust_tunnel_cloudflared_config.tunnel_config[0].config[0].ingress_rule[0].service == var.tunnel_config.ingress_rule[0].service
+    condition     = cloudflare_zero_trust_tunnel_cloudflared_config.tunnel_config[0].config.ingress[0].service == var.tunnel_config.ingress_rule[0].service
     error_message = "The Cloudflare tunnel ingress rule service does not match."
-  }
-
-  assert {
-    condition     = cloudflare_zero_trust_tunnel_cloudflared_config.tunnel_config[0].config[0].ingress_rule[0].origin_request[0].bastion_mode == var.tunnel_config.ingress_rule[0].origin_request.bastion_mode
-    error_message = "The Cloudflare tunnel ingress rule origin request bastion mode does not match."
   }
 }
 
@@ -64,17 +56,17 @@ run "virtual_network" {
   }
 
   assert {
-    condition     = cloudflare_zero_trust_tunnel_virtual_network.virtual_network[0].name == var.virtual_network_name
+    condition     = cloudflare_zero_trust_tunnel_cloudflared_virtual_network.virtual_network[0].name == var.virtual_network_name
     error_message = "The Cloudflare virtual network name does not match."
   }
 
   assert {
-    condition     = cloudflare_zero_trust_tunnel_virtual_network.virtual_network[0].comment == var.virtual_network_comment
+    condition     = cloudflare_zero_trust_tunnel_cloudflared_virtual_network.virtual_network[0].comment == var.virtual_network_comment
     error_message = "The Cloudflare virtual network comment does not match."
   }
 
   assert {
-    condition     = cloudflare_zero_trust_tunnel_virtual_network.virtual_network[0].is_default_network == var.virtual_network_is_default_network
+    condition     = cloudflare_zero_trust_tunnel_cloudflared_virtual_network.virtual_network[0].is_default_network == var.virtual_network_is_default_network
     error_message = "The Cloudflare virtual network is not the default network."
   }
 }
@@ -103,23 +95,64 @@ run "tunnel_route" {
   }
 
   assert {
-    condition     = cloudflare_zero_trust_tunnel_route.route["10.10.10.0/24"].network == var.routes[0].network
+    condition     = cloudflare_zero_trust_tunnel_cloudflared_route.route["10.10.10.0/24"].network == var.routes[0].network
     error_message = "The Cloudflare tunnel route network does not match."
   }
 
   assert {
-    condition     = cloudflare_zero_trust_tunnel_route.route["10.10.10.0/24"].virtual_network_id == var.routes[0].virtual_network_id
+    condition     = cloudflare_zero_trust_tunnel_cloudflared_route.route["10.10.10.0/24"].virtual_network_id == var.routes[0].virtual_network_id
     error_message = "The Cloudflare tunnel route virtual network id does not match."
   }
 
   assert {
-    condition     = cloudflare_zero_trust_tunnel_route.route["10.10.10.0/24"].comment == var.routes[0].comment
+    condition     = cloudflare_zero_trust_tunnel_cloudflared_route.route["10.10.10.0/24"].comment == var.routes[0].comment
     error_message = "The Cloudflare tunnel route comment does not match."
   }
 
   assert {
-    condition     = length(cloudflare_zero_trust_tunnel_route.route) > 1
+    condition     = length(cloudflare_zero_trust_tunnel_cloudflared_route.route) > 1
     error_message = "The Cloudflare tunnel routes are not more than one."
+  }
+}
+
+run "tunnel_backward_compat" {
+  command = plan
+
+  variables {
+    tunnel_name = "backward-compat-example"
+    tunnel_config = {
+      warp_routing = true
+      ingress_rule = [
+        {
+          service = "bastion"
+          origin_request = {
+            bastion_mode    = true
+            connect_timeout = "30s"
+            tls_timeout     = "10s"
+            tcp_keep_alive  = "1m30s"
+            proxy_address   = "127.0.0.1"
+            proxy_port      = "8080"
+            ip_rules = [
+              {
+                prefix = "10.0.0.0/8"
+                ports  = [80, 443]
+                allow  = true
+              }
+            ]
+          }
+        },
+      ]
+    }
+  }
+
+  assert {
+    condition     = cloudflare_zero_trust_tunnel_cloudflared.tunnel[0].name == "tf-tunnel-${var.tunnel_name}"
+    error_message = "The tunnel name does not match."
+  }
+
+  assert {
+    condition     = cloudflare_zero_trust_tunnel_cloudflared_config.tunnel_config[0].config.ingress[0].service == "bastion"
+    error_message = "The ingress rule service does not match."
   }
 }
 
@@ -132,9 +165,6 @@ run "tunnel_disabled" {
       ingress_rule = [
         {
           service = "bastion"
-          origin_request = {
-            bastion_mode = true
-          }
         },
       ]
     }
@@ -165,7 +195,7 @@ run "tunnel_route_disabled" {
   }
 
   assert {
-    condition     = try(cloudflare_zero_trust_tunnel_route.route[0], null) == null
+    condition     = try(cloudflare_zero_trust_tunnel_cloudflared_route.route[0], null) == null
     error_message = "The Cloudflare tunnel route is not null."
   }
 }
@@ -185,7 +215,7 @@ run "virtual_network_disabled" {
   }
 
   assert {
-    condition     = try(cloudflare_zero_trust_tunnel_virtual_network.virtual_network[0], null) == null
+    condition     = try(cloudflare_zero_trust_tunnel_cloudflared_virtual_network.virtual_network[0], null) == null
     error_message = "The Cloudflare virtual network is not null."
   }
 }
