@@ -43,36 +43,25 @@ variable "tunnel_config_src" {
 variable "tunnel_config" {
   description = "(Required) The configuration for the Cloudflare Tunnel."
   type = object({
-    warp_routing = optional(bool, false)
-
     origin_request = optional(object({
-      connect_timeout          = optional(string, "30s")
-      tls_timeout              = optional(string, "10s")
-      tcp_keep_alive           = optional(string, "30s")
+      connect_timeout          = optional(number)
+      tls_timeout              = optional(number)
+      tcp_keep_alive           = optional(number)
       no_happy_eyeballs        = optional(bool, false)
       keep_alive_connections   = optional(number, 100)
-      keep_alive_timeout       = optional(string, "1m30s")
+      keep_alive_timeout       = optional(number)
       http_host_header         = optional(string, "")
       origin_server_name       = optional(string, "")
       ca_pool                  = optional(string, "")
       no_tls_verify            = optional(bool, false)
       disable_chunked_encoding = optional(bool, false)
-      bastion_mode             = optional(bool, false)
       http2_origin             = optional(bool, false)
-      proxy_address            = optional(string, "127.0.0.1")
-      proxy_port               = optional(string, "0")
       proxy_type               = optional(string, "")
-
-      ip_rules = optional(list(object({
-        prefix = optional(string)
-        ports  = optional(list(number))
-        allow  = optional(bool)
-      })))
 
       access = optional(object({
         required  = optional(bool)
-        team_name = optional(string)
-        aud_tag   = optional(set(string))
+        team_name = string
+        aud_tag   = list(string)
       }))
     }))
 
@@ -82,33 +71,24 @@ variable "tunnel_config" {
       service  = string
 
       origin_request = optional(object({
-        connect_timeout          = optional(string, "30s")
-        tls_timeout              = optional(string, "10s")
-        tcp_keep_alive           = optional(string, "30s")
+        connect_timeout          = optional(number)
+        tls_timeout              = optional(number)
+        tcp_keep_alive           = optional(number)
         no_happy_eyeballs        = optional(bool, false)
         keep_alive_connections   = optional(number, 100)
-        keep_alive_timeout       = optional(string, "1m30s")
+        keep_alive_timeout       = optional(number)
         http_host_header         = optional(string, "")
         origin_server_name       = optional(string, "")
         ca_pool                  = optional(string, "")
         no_tls_verify            = optional(bool, false)
         disable_chunked_encoding = optional(bool, false)
-        bastion_mode             = optional(bool, false)
         http2_origin             = optional(bool, false)
-        proxy_address            = optional(string, "127.0.0.1")
-        proxy_port               = optional(string, "0")
         proxy_type               = optional(string, "")
-
-        ip_rules = optional(list(object({
-          prefix = optional(string)
-          ports  = optional(list(number))
-          allow  = optional(bool)
-        })))
 
         access = optional(object({
           required  = optional(bool)
-          team_name = optional(string)
-          aud_tag   = optional(set(string))
+          team_name = string
+          aud_tag   = list(string)
         }))
       }))
     }))

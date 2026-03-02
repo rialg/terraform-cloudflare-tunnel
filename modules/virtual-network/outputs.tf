@@ -3,7 +3,7 @@
 
 output "virtual_network_id" {
   description = "The ID of the created virtual network."
-  value       = try(cloudflare_zero_trust_tunnel_virtual_network.virtual_network[0].id, null)
+  value       = try(cloudflare_zero_trust_tunnel_cloudflared_virtual_network.virtual_network[0].id, null)
 }
 
 output "virtual_network_name" {
