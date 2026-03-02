@@ -41,15 +41,32 @@ variable "tunnel_config_src" {
 }
 
 variable "tunnel_config" {
-  description = "(Required) The configuration for the Cloudflare Tunnel."
+  description = <<-EOT
+    (Required) The configuration for the Cloudflare Tunnel.
+
+    Deprecated fields (ignored by provider >= 5.17.0, kept for backward compatibility):
+    - warp_routing: No longer supported in tunnel config resource.
+    - origin_request.bastion_mode: No longer supported in provider >= 5.17.0.
+    - origin_request.proxy_address: No longer supported in provider >= 5.17.0.
+    - origin_request.proxy_port: No longer supported in provider >= 5.17.0.
+    - origin_request.ip_rules: No longer supported in provider >= 5.17.0.
+
+    Changed fields:
+    - Timeout fields (connect_timeout, tls_timeout, tcp_keep_alive, keep_alive_timeout)
+      now expect numbers (seconds). String values (e.g. "30s") are still accepted for
+      backward compatibility and will be automatically converted.
+  EOT
   type = object({
+    # Deprecated: no longer supported in provider >= 5.17.0, kept for backward compatibility.
+    warp_routing = optional(bool, false)
+
     origin_request = optional(object({
-      connect_timeout          = optional(number)
-      tls_timeout              = optional(number)
-      tcp_keep_alive           = optional(number)
+      connect_timeout          = optional(any)
+      tls_timeout              = optional(any)
+      tcp_keep_alive           = optional(any)
       no_happy_eyeballs        = optional(bool, false)
       keep_alive_connections   = optional(number, 100)
-      keep_alive_timeout       = optional(number)
+      keep_alive_timeout       = optional(any)
       http_host_header         = optional(string, "")
       origin_server_name       = optional(string, "")
       ca_pool                  = optional(string, "")
@@ -58,10 +75,22 @@ variable "tunnel_config" {
       http2_origin             = optional(bool, false)
       proxy_type               = optional(string, "")
 
+      # Deprecated: no longer supported in provider >= 5.17.0, kept for backward compatibility.
+      bastion_mode  = optional(bool, false)
+      proxy_address = optional(string, "127.0.0.1")
+      proxy_port    = optional(string, "0")
+
+      # Deprecated: no longer supported in provider >= 5.17.0, kept for backward compatibility.
+      ip_rules = optional(list(object({
+        prefix = optional(string)
+        ports  = optional(list(number))
+        allow  = optional(bool)
+      })))
+
       access = optional(object({
         required  = optional(bool)
-        team_name = string
-        aud_tag   = list(string)
+        team_name = optional(string)
+        aud_tag   = optional(list(string))
       }))
     }))
 
@@ -71,12 +100,12 @@ variable "tunnel_config" {
       service  = string
 
       origin_request = optional(object({
-        connect_timeout          = optional(number)
-        tls_timeout              = optional(number)
-        tcp_keep_alive           = optional(number)
+        connect_timeout          = optional(any)
+        tls_timeout              = optional(any)
+        tcp_keep_alive           = optional(any)
         no_happy_eyeballs        = optional(bool, false)
         keep_alive_connections   = optional(number, 100)
-        keep_alive_timeout       = optional(number)
+        keep_alive_timeout       = optional(any)
         http_host_header         = optional(string, "")
         origin_server_name       = optional(string, "")
         ca_pool                  = optional(string, "")
@@ -85,10 +114,22 @@ variable "tunnel_config" {
         http2_origin             = optional(bool, false)
         proxy_type               = optional(string, "")
 
+        # Deprecated: no longer supported in provider >= 5.17.0, kept for backward compatibility.
+        bastion_mode  = optional(bool, false)
+        proxy_address = optional(string, "127.0.0.1")
+        proxy_port    = optional(string, "0")
+
+        # Deprecated: no longer supported in provider >= 5.17.0, kept for backward compatibility.
+        ip_rules = optional(list(object({
+          prefix = optional(string)
+          ports  = optional(list(number))
+          allow  = optional(bool)
+        })))
+
         access = optional(object({
           required  = optional(bool)
-          team_name = string
-          aud_tag   = list(string)
+          team_name = optional(string)
+          aud_tag   = optional(list(string))
         }))
       }))
     }))

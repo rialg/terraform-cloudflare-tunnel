@@ -115,6 +115,47 @@ run "tunnel_route" {
   }
 }
 
+run "tunnel_backward_compat" {
+  command = plan
+
+  variables {
+    tunnel_name = "backward-compat-example"
+    tunnel_config = {
+      warp_routing = true
+      ingress_rule = [
+        {
+          service = "bastion"
+          origin_request = {
+            bastion_mode    = true
+            connect_timeout = "30s"
+            tls_timeout     = "10s"
+            tcp_keep_alive  = "1m30s"
+            proxy_address   = "127.0.0.1"
+            proxy_port      = "8080"
+            ip_rules = [
+              {
+                prefix = "10.0.0.0/8"
+                ports  = [80, 443]
+                allow  = true
+              }
+            ]
+          }
+        },
+      ]
+    }
+  }
+
+  assert {
+    condition     = cloudflare_zero_trust_tunnel_cloudflared.tunnel[0].name == "tf-tunnel-${var.tunnel_name}"
+    error_message = "The tunnel name does not match."
+  }
+
+  assert {
+    condition     = cloudflare_zero_trust_tunnel_cloudflared_config.tunnel_config[0].config.ingress[0].service == "bastion"
+    error_message = "The ingress rule service does not match."
+  }
+}
+
 run "tunnel_disabled" {
   command = plan
 

@@ -21,13 +21,13 @@ module "virtual_network" {
 
 | Name | Version |
 |------|---------|
-| <a name="provider_cloudflare"></a> [cloudflare](#provider\_cloudflare) | < 5 |
+| <a name="provider_cloudflare"></a> [cloudflare](#provider\_cloudflare) | ~>5.17.0 |
 ## Requirements
 
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.10 |
-| <a name="requirement_cloudflare"></a> [cloudflare](#requirement\_cloudflare) | < 5 |
+| <a name="requirement_cloudflare"></a> [cloudflare](#requirement\_cloudflare) | ~>5.17.0 |
 ## Inputs
 
 | Name | Description | Type | Default | Required |
@@ -50,5 +50,5 @@ module "virtual_network" {
 
 | Name | Type |
 |------|------|
-| [cloudflare_zero_trust_tunnel_virtual_network.virtual_network](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/zero_trust_tunnel_virtual_network) | resource |
+| [cloudflare_zero_trust_tunnel_cloudflared_virtual_network.virtual_network](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/zero_trust_tunnel_cloudflared_virtual_network) | resource |
 <!-- markdownlint-restore -->
