@@ -44,12 +44,12 @@ variable "tunnel_config" {
   description = <<-EOT
     (Required) The configuration for the Cloudflare Tunnel.
 
-    Deprecated fields (ignored by provider >= 5.17.0, kept for backward compatibility):
+    Deprecated fields (ignored by provider >= v5, kept for backward compatibility):
     - warp_routing: No longer supported in tunnel config resource.
-    - origin_request.bastion_mode: No longer supported in provider >= 5.17.0.
-    - origin_request.proxy_address: No longer supported in provider >= 5.17.0.
-    - origin_request.proxy_port: No longer supported in provider >= 5.17.0.
-    - origin_request.ip_rules: No longer supported in provider >= 5.17.0.
+    - origin_request.bastion_mode: No longer supported in provider >= v5.
+    - origin_request.proxy_address: No longer supported in provider >= v5.
+    - origin_request.proxy_port: No longer supported in provider >= v5.
+    - origin_request.ip_rules: No longer supported in provider >= v5.
 
     Changed fields:
     - Timeout fields (connect_timeout, tls_timeout, tcp_keep_alive, keep_alive_timeout)
@@ -57,7 +57,7 @@ variable "tunnel_config" {
       backward compatibility and will be automatically converted.
   EOT
   type = object({
-    # Deprecated: no longer supported in provider >= 5.17.0, kept for backward compatibility.
+    # Deprecated: no longer supported in provider >= v5, kept for backward compatibility.
     warp_routing = optional(bool, false)
 
     origin_request = optional(object({
@@ -75,12 +75,12 @@ variable "tunnel_config" {
       http2_origin             = optional(bool, false)
       proxy_type               = optional(string, "")
 
-      # Deprecated: no longer supported in provider >= 5.17.0, kept for backward compatibility.
+      # Deprecated: no longer supported in provider >= v5, kept for backward compatibility.
       bastion_mode  = optional(bool, false)
       proxy_address = optional(string, "127.0.0.1")
       proxy_port    = optional(string, "0")
 
-      # Deprecated: no longer supported in provider >= 5.17.0, kept for backward compatibility.
+      # Deprecated: no longer supported in provider >= v5, kept for backward compatibility.
       ip_rules = optional(list(object({
         prefix = optional(string)
         ports  = optional(list(number))
@@ -114,12 +114,12 @@ variable "tunnel_config" {
         http2_origin             = optional(bool, false)
         proxy_type               = optional(string, "")
 
-        # Deprecated: no longer supported in provider >= 5.17.0, kept for backward compatibility.
+        # Deprecated: no longer supported in provider >= v5, kept for backward compatibility.
         bastion_mode  = optional(bool, false)
         proxy_address = optional(string, "127.0.0.1")
         proxy_port    = optional(string, "0")
 
-        # Deprecated: no longer supported in provider >= 5.17.0, kept for backward compatibility.
+        # Deprecated: no longer supported in provider >= v5, kept for backward compatibility.
         ip_rules = optional(list(object({
           prefix = optional(string)
           ports  = optional(list(number))

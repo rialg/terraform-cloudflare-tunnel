@@ -1,8 +1,8 @@
 # Upgrading Guide
 
-## Upgrading to Cloudflare Provider v5.17.0
+## Upgrading to Cloudflare Provider v5
 
-The Cloudflare Terraform provider v5.17.0 introduced breaking changes to
+The Cloudflare Terraform provider v5 introduced breaking changes to
 several resource types and schemas. This module has been updated to support
 the new provider, with backward-compatible variable definitions where possible.
 
@@ -42,7 +42,7 @@ terraform import '<MODULE_PATH>.cloudflare_zero_trust_tunnel_cloudflared_config.
 
 ```shell
 terraform state rm 'module.bastion_tunnel.cloudflare_zero_trust_tunnel_cloudflared_config.tunnel_config[0]'
-terraform import 'module.bastion_tunnel.cloudflare_zero_trust_tunnel_cloudflared_config.tunnel_config[0]' '699d98642c564d2e855e9661899b7252/f70ff985-a4ef-4643-bbbc-4a0ed4fc8415'
+terraform import 'module.bastion_tunnel.cloudflare_zero_trust_tunnel_cloudflared_config.tunnel_config[0]' '<ACCOUNT_ID>/<TUNNEL_ID>'
 ```
 
 #### 2. Tunnel Routes (`cloudflare_zero_trust_tunnel_route` → `cloudflare_zero_trust_tunnel_cloudflared_route`)
@@ -116,7 +116,7 @@ no destroy/recreate actions for the migrated resources.
 ### Deprecated Variables
 
 The following `tunnel_config` fields are still accepted for backward
-compatibility but are **silently ignored** by the provider >= 5.17.0:
+compatibility but are **silently ignored** by the provider v5:
 
 | Field | Notes |
 |-------|-------|
